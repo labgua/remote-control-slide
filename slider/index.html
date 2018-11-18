@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Previous/Next example</title>
+</head>
+<body>
+
+<h1>Title presentation</h1>
+
+<button onclick="make_socket();">Connect</button>
+
+<div>
+  <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
+</div>
+
+<div>
+  <canvas id="the-canvas" style="border:1px solid black"></canvas>
+</div>
+
+<!-- Pdf.js-->
+<script src="../build/pdf.js"></script>
+
+<!-- Communication with websock -->
+<script src="mysock.js"></script>
+
+<!-- Pdf slider conf -->
+<script src="pdfconf.js"></script>
+
+
+</body>
+</html>
