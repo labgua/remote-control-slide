@@ -7,6 +7,7 @@ function make_socket(){
 	// Connection opened
 	socket.addEventListener('open', function (event) {
 		console.log("Socket Opened!")
+		document.querySelector("#btn_connect").setAttribute("disabled", "true");
 	});
 
 	// Listen for messages
@@ -15,6 +16,11 @@ function make_socket(){
 		msg = event.data;
 
 	    console.log('Message from server ', msg);
+
+	    if( msg.startsWith('url') ){
+	    	var url = msg.split("##")[1];
+	    	load_doc(url);
+	    }
 
 	    if( msg.startsWith('p') ){
 	    	page = parseInt(msg.split('p')[1]);
@@ -29,5 +35,11 @@ function make_socket(){
 			onPrevPage();
 	    }
 */
+	});
+
+	// Connection closed
+	socket.addEventListener('close', function (event) {
+		console.log("Socket Closed!")
+		document.querySelector("#btn_connect").removeAttribute("disabled");
 	});
 }

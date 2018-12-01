@@ -6,16 +6,15 @@
 </head>
 <body>
 
-<h1>Title presentation</h1>
-
-<button onclick="make_socket();">Connect</button>
-
-<div>
-  <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
+<div style="display: block; text-align: center;">
+	<button id="btn_connect" onclick="make_socket();">Connect</button>
+	<div style="display: inline;">
+	  <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
+	</div>
 </div>
 
-<div>
-  <canvas id="the-canvas" style="border:1px solid black"></canvas>
+<div style="display: block; text-align: center;">
+  <canvas id="the-canvas" style=""></canvas>
 </div>
 
 <!-- Pdf.js-->

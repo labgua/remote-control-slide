@@ -10,11 +10,13 @@ import socket
 
 class SliderWebsocket(tornado.websocket.WebSocketHandler):
 
+    url = ""
     currpage = 1
     clients = []
 
     def open(self):
-        print 'Nuova connessione, siamo a pagina %d' % SliderWebsocket.currpage
+        print 'Nuova connessione, siamo a pagina %d con url:%s' % (SliderWebsocket.currpage, SliderWebsocket.url)
+        self.write_message( 'url##%s' % SliderWebsocket.url )
         self.write_message( 'p%d' % SliderWebsocket.currpage )
         SliderWebsocket.clients.append(self)
 
@@ -36,10 +38,12 @@ class SliderWebsocket(tornado.websocket.WebSocketHandler):
     @staticmethod
     def inc() :
         SliderWebsocket.currpage = SliderWebsocket.currpage + 1
+        SliderWebsocket.notifyAll('p%d' % SliderWebsocket.currpage)
 
     @staticmethod
     def dec() :
         SliderWebsocket.currpage = SliderWebsocket.currpage - 1
+        SliderWebsocket.notifyAll('p%d' % SliderWebsocket.currpage)
 
     @staticmethod
     def notifyAll(msg) :
@@ -66,30 +70,38 @@ if __name__ == "__main__":
     t = threading.Thread(target=tornadoInstance.start)
     t.start()
 
-    page = 1
+    SliderWebsocket.url = "slide.pdf"
+    SliderWebsocket.currpage = 1
 
     while 1:
         line = sys.stdin.readline()
         line = line.replace('\n','')
+
+        if line == '':
+            continue
 
         print 'ricevuto |%s|' % line
 
         if line == 'exit':
             break
 
+        if line.startswith("url"):
+            url = line.split("##")[1]
+            SliderWebsocket.url = url
+            SliderWebsocket.currpage = 1
+
         if line[0] == 'p':
             page = int( line.split('p')[1])
+            SliderWebsocket.currpage = page
             SliderWebsocket.notifyAll('p%d'%page)
 
         if line == 'a':
-            page = page - 1
-            #SliderWebsocket.dec()
-            SliderWebsocket.notifyAll('p%d'%page)
+            SliderWebsocket.dec()
 
         if line == 'd':
-            page = page + 1
-            #SliderWebsocket.inc()
-            SliderWebsocket.notifyAll('p%d'%page)
+            SliderWebsocket.inc()
 
     t.do_run = False
     t.join()
+
+    print("after join")

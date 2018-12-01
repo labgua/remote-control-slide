@@ -16,7 +16,7 @@
       pageNum = 1,
       pageRendering = false,
       pageNumPending = null,
-      scale = 2,
+      scale = 1.5,
       canvas = document.getElementById('the-canvas'),
       ctx = canvas.getContext('2d');
 
@@ -98,10 +98,14 @@
   /**
    * Asynchronously downloads PDF.
    */
-  pdfjsLib.getDocument(url).then(function (pdfDoc_) {
-    pdfDoc = pdfDoc_;
-    document.getElementById('page_count').textContent = pdfDoc.numPages;
+  function load_doc(url){
+    console.log("loading document", url)
+    pdfjsLib.getDocument(url).then(function (pdfDoc_) {
+      pdfDoc = pdfDoc_;
+      document.getElementById('page_count').textContent = pdfDoc.numPages;
 
-    // Initial/first page rendering
-    renderPage(pageNum);
-  });
+      // Initial/first page rendering
+      renderPage(pageNum);
+    });
+  }
+  //load_doc(url);
