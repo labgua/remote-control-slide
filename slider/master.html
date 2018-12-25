@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Master Control Slider</title>
+	<script type="text/javascript">
+		
+		var wsctr;
+
+		function init(addrWS) {
+			wsctr = new WebSocket("ws://"+addrWS+"/websocketserver");
+			wsctr.onopen = function(){
+				wsctr.send("master");
+			};
+		}
+
+		function setUrl(urlPDF){
+			wsctr.send("url##"+urlPDF);
+		}
+
+		function prev(){
+			wsctr.send("a");
+		}
+
+		function next(){
+			wsctr.send("d");
+		}
+
+		function setPage(page) {
+			wsctr.send("p"+page);
+		}
+
+
+
+
+		function onClickInit(){
+			url = document.querySelector("#in_addrWS").value;
+			init(url);
+		}
+
+		function onClickSetPage(){
+			page = document.querySelector("#in_page").value;
+			setPage(page);
+		}
+
+		function onClickSetUrl(){
+			url = document.querySelector("#in_urlPdf").value;
+			setUrl(url);
+		}
+
+	</script>
+</head>
+<body>
+
+<p>Remote Slider Address : <input id="in_addrWS" type="text" value="localhost:8000"> <button onclick="onClickInit();">INIT</button> </p>
+<p>set url : <input id="in_urlPdf" type="text" > <button onclick="onClickSetUrl();">setUrl</button> </p>
+<p>
+	<button onclick="prev();" >PREV</button>
+	<button onclick="next();" >NEXT</button>
+</p>
+<p>set page : <input id="in_page" type="text"> <button onclick="onClickSetPage();">setPage</button></p>
+
+</body>
+</html>
